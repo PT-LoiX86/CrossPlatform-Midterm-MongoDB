@@ -1,71 +1,76 @@
 import 'package:flutter/material.dart';
 
-import 'services/mongo_service.dart';
+import 'app_root.dart';
 
 void main() {
-  runApp(const MaterialApp(home: MongoTestPage()));
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const LecturerManagementApp());
 }
 
-class MongoTestPage extends StatefulWidget {
-  const MongoTestPage({super.key});
-
-  @override
-  State<MongoTestPage> createState() => _MongoTestPageState();
-}
-
-class _MongoTestPageState extends State<MongoTestPage> {
-  String result = 'Not tested yet';
-  bool loading = false;
-
-  Future<void> testConnection() async {
-    setState(() {
-      loading = true;
-      result = 'Testing...';
-    });
-
-    try {
-      await MongoService.addUser('Flutter connection test ${DateTime.now()}');
-
-      final users = await MongoService.getUsers();
-
-      setState(() {
-        result =
-            'SUCCESS!\n'
-            'POST: User created\n'
-            'GET: ${users.length} users retrieved\n'
-            'Latest: ${users.first['name']}';
-      });
-    } catch (e) {
-      setState(() {
-        result = 'ERROR: $e';
-      });
-    } finally {
-      setState(() {
-        loading = false;
-      });
-    }
-  }
+class LecturerManagementApp extends StatelessWidget {
+  const LecturerManagementApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('MongoDB Test')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: loading ? null : testConnection,
-                child: const Text('Test Connection'),
-              ),
-              const SizedBox(height: 20),
-              Text(result),
-            ],
+    const primaryBlue = Color(0xFF1769AA);
+
+    return MaterialApp(
+      title: 'Lecturer Manager',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: primaryBlue,
+          primary: primaryBlue,
+          surface: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF4F8FC),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xFF16324F),
+          centerTitle: false,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xFFF7FAFD),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: Color(0xFFDCE7F1)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: Color(0xFFDCE7F1)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: primaryBlue, width: 1.5),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 15,
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: primaryBlue,
+            foregroundColor: Colors.white,
+            minimumSize: const Size.fromHeight(50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        snackBarTheme: SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),
+      home: const AppRoot(),
     );
   }
 }
