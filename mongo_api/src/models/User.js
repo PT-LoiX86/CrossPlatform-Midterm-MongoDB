@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     collection: "NguoiDung",
   },
 );

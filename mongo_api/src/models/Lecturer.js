@@ -28,7 +28,7 @@ const lecturerSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     collection: "GiangVien",
   },
 );
